@@ -1,5 +1,5 @@
 import './assets/main.css'
-import './axios'
+import './axios.js'
 
 import { createApp } from 'vue'
 import App from './App.vue'
