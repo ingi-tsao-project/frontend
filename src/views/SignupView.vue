@@ -1,11 +1,13 @@
 <script>
 import axios from "axios";
 export default {
-    name: "Login",
+    name: "Signup",
     data() {
         return {
             email: "",
             password: "",
+            errMessage: "",
+            URLimage: "https://img.freepik.com/free-vector/login-concept-illustration_114360-739.jpg",
             error: false,
             isWaiting: false,
         };
@@ -13,21 +15,25 @@ export default {
     methods: {
         async handleSubmit() {
             try {
-                console.log("Runing request...");
+                this.isWaiting = false;
+                this.error = false;
                 this.isWaiting = true;
                 const response = await axios.post("users/login", {
                     email: this.email,
                     password: this.password
                 });
-                console.log(response.status)
                 if (response.status === 200) {
                     this.$router.push({ name: 'home' });
                 }
             } catch (err) {
-                console.log(err.response.data.message);
-                console.log(err.response);
                 this.isWaiting = false;
                 this.error = true;
+                console.log(err.response.data.message);
+                if (err.response.data.message = "Invalid password" || "Email does not exist"){
+                    this.errMessage = "Email or password incorrect"
+                }else {
+                    this.errMessage = "We have problems :c"
+                }
 
 
             }
@@ -43,9 +49,9 @@ export default {
 
 <template>
     <div class="LoginView-Container">
-        <h1>
-            Welcome
-        </h1>
+        <h3>
+            Welcome!
+        </h3>
         <form @submit.prevent="handleSubmit" class="mx-5">
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
@@ -63,20 +69,22 @@ export default {
                 </button>
             </div>
             <div v-if="error">
-                <p class="text-danger text-center my-2">Incorrect data :(</p>
+                <p class="text-danger text-center my-2">{{ errMessage }}</p>
             </div>
         </form>
         <div class="d-flex flex-column align-items-center">
-            <a href="#" class="text-secondary rounded-1 text-start">Create an account</a>
+            <a href="/signup" class="text-secondary rounded-1 text-start">Create an account</a>
             <a href="#" class="text-secondary rounded-1">Forgot your password?</a>
         </div>
     </div>
-
+    <div class="Imagen-container">
+        <img :src="URLimage" alt="Descripción de la imagen">
+    </div>
 </template>
 
 <style lang="scss">
 //@import './path.css'
-$main-color: rgb(213, 213, 213);
+$main-color: rgb(233, 233, 233);
 $second-color: rgb(227, 227, 227);
 
 
@@ -84,7 +92,7 @@ $second-color: rgb(227, 227, 227);
     background-color: $main-color;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-evenly;
     flex-direction: column;
     height: 400px;
     border-radius: 8px;
@@ -105,5 +113,26 @@ $second-color: rgb(227, 227, 227);
         }
     }
     */
+}
+
+.Imagen-container{
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* offsetX offsetY blurRadius spreadRadius color */
+    border-radius: 10px;
+    margin-left: -16px;
+    z-index: -1;
+    //border: 2px solid rgb(150, 150, 150)
+    user-select: none;
+    img{
+        pointer-events: none;
+        /* Haz que la imagen ocupe el 100% de la altura del contenedor */
+        height: 80%;
+        /* Para que la imagen mantenga su aspecto original */
+        width: auto;
+    }
+
 }
 </style>
