@@ -1,46 +1,50 @@
-<script setup>
+<script>
 import axios from "axios";
-import {ref} from "vue";
-import { useRouter } from 'vue-router'; // Importa useRouter en lugar de router
+export default {
+    name: "Login",
+    data() {
+        return {
+            email: "",
+            password: "",
+            errMessage: "",
+            URLimage: "https://img.freepik.com/free-vector/login-concept-illustration_114360-739.jpg",
+            error: false,
+            isWaiting: false,
+        };
+    },
+    methods: {
+        async handleSubmit() {
+            try {
+                this.isWaiting = false;
+                this.error = false;
+                this.isWaiting = true;
+                const response = await axios.post("users/login", {
+                    email: this.email,
+                    password: this.password
+                });
+                if (response.status === 200) {
+                    this.$router.push({ name: 'home' });
+                }
+            } catch (err) {
+                this.isWaiting = false;
+                this.error = true;
+                console.log(err.response.data.message);
+                if (err.response.data.message = "Invalid password" || "Email does not exist"){
+                    this.errMessage = "Email or password incorrect"
+                }else {
+                    this.errMessage = "We have problems :c"
+                }
 
-const email = ref("");
-const password = ref("");
-const errMessage = ref("");
-const URLimage = "https://img.freepik.com/free-vector/login-concept-illustration_114360-739.jpg";
-const error = ref(false);   
-const isWaiting = ref(false);
-const router = useRouter(); // Obtiene el enrutador
 
-const handleSubmit = async () => {
-    try {
-        isWaiting.value = false;
-        error.value = false;
-        isWaiting.value = true;
-        const response = await axios.post("users/login", {
-            email: email.value,
-            password: password.value
-        });
-        if (response.status === 200) {
-            router.push({ name: 'Home' });
-        }
-    } catch (err) {
-        isWaiting.value = false;
-        error.value = true;
-        console.log("sapa");
-        console.log(err);
-        if (err.response.data.message === "Invalid password" || err.response.data.message === "Email does not exist") {
-            errMessage.value = "Email or password incorrect";
-        } else {
-            errMessage.value = "We have problems :c";
+            }
+        },
+        async checkConnection() {
+            console.log("running request")
+            const response = await axios.get("tours");
+            console.log(response);
         }
     }
-};
-
-const checkConnection = async () => {
-    console.log("running request");
-    const response = await axios.get("tours");
-    console.log(response);
-};
+}
 </script>
 
 <template>
@@ -77,7 +81,6 @@ const checkConnection = async () => {
         <img :src="URLimage" alt="Descripción de la imagen">
     </div>
 </template>
-
 
 <style lang="scss">
 //@import './path.css'
