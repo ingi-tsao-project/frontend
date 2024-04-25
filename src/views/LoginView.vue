@@ -23,7 +23,8 @@ const handleSubmit = async () => {
         if (response.status === 200) {
             console.log(response);
             localStorage.setItem("token", response.data.token);
-            //router.push({ name: 'Home' });
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+            router.push({ name: 'Home' });
         }
     } catch (err) {
         isWaiting.value = false;

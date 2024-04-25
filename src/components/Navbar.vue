@@ -3,8 +3,11 @@ import { useRouter } from 'vue-router'; // Importa useRouter en lugar de router
 const router = useRouter();
 const handlingLogin = () => {
     console.log("aarr")
-    router.push({ name: 'login' });
+    console.log(localStorage.getItem("user"));
+    //router.push({ name: 'login' });
 }
+
+
 </script>
 
 <template>
@@ -18,7 +21,7 @@ const handlingLogin = () => {
             <img src="../assets/loguito.png" alt="">
         </div>
         <div class="div-buttons">
-            <button type="button" class="btn btn btn-outline-light" @click="router.push({ name: 'login' })">Login</button>
+            <button type="button" class="btn btn btn-outline-light" @click="handlingLogin">Login</button>
             <button type="button" class="btn btn btn-light" @click="router.push({ name: 'signup' })">Signup</button>
         </div>
     </nav>
