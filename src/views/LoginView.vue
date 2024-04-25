@@ -21,7 +21,9 @@ const handleSubmit = async () => {
             password: password.value
         });
         if (response.status === 200) {
-            router.push({ name: 'Home' });
+            console.log(response);
+            localStorage.setItem("token", response.data.token);
+            //router.push({ name: 'Home' });
         }
     } catch (err) {
         isWaiting.value = false;
